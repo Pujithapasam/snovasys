@@ -36,13 +36,16 @@ public class LedgerService {
      */
     @Transactional
     public void postDoubleEntry(TransactionRecord tx, Account debitAccount, Account creditAccount, BigDecimal amount) {
+        // Normalize amount to scale 4 to ensure deterministic hash generation across database round-trips
+        BigDecimal normalizedAmount = amount.setScale(4, java.math.RoundingMode.HALF_UP);
+
         // 1. Get latest entry order and hash
         LedgerEntry lastEntry = ledgerEntryRepository.findTopByOrderByEntryOrderDesc().orElse(null);
         long currentOrder = (lastEntry == null) ? 1L : lastEntry.getEntryOrder() + 1L;
         String currentPrevHash = (lastEntry == null) ? GENESIS_HASH : lastEntry.getEntryHash();
 
         // 2. Create DEBIT entry
-        String debitPayload = currentOrder + ":" + tx.getTxUuid() + ":" + debitAccount.getId() + ":DEBIT:" + amount.toPlainString() + ":" + currentPrevHash;
+        String debitPayload = currentOrder + ":" + tx.getTxUuid() + ":" + debitAccount.getId() + ":DEBIT:" + normalizedAmount.toPlainString() + ":" + currentPrevHash;
         String debitHash = computeSha256(debitPayload);
 
         LedgerEntry debitEntry = new LedgerEntry(
@@ -50,7 +53,7 @@ public class LedgerService {
                 tx,
                 debitAccount,
                 EntryType.DEBIT,
-                amount,
+                normalizedAmount,
                 currentPrevHash,
                 debitHash
         );
@@ -58,7 +61,7 @@ public class LedgerService {
 
         // 3. Create CREDIT entry chained to debit entry
         long nextOrder = currentOrder + 1L;
-        String creditPayload = nextOrder + ":" + tx.getTxUuid() + ":" + creditAccount.getId() + ":CREDIT:" + amount.toPlainString() + ":" + debitHash;
+        String creditPayload = nextOrder + ":" + tx.getTxUuid() + ":" + creditAccount.getId() + ":CREDIT:" + normalizedAmount.toPlainString() + ":" + debitHash;
         String creditHash = computeSha256(creditPayload);
 
         LedgerEntry creditEntry = new LedgerEntry(
@@ -66,7 +69,7 @@ public class LedgerService {
                 tx,
                 creditAccount,
                 EntryType.CREDIT,
-                amount,
+                normalizedAmount,
                 debitHash,
                 creditHash
         );
@@ -93,11 +96,12 @@ public class LedgerService {
             }
 
             // Recompute entry hash
+            String amountStr = entry.getAmount().setScale(4, java.math.RoundingMode.HALF_UP).toPlainString();
             String payload = entry.getEntryOrder() + ":" +
                     entry.getTransactionRecord().getTxUuid() + ":" +
                     entry.getAccount().getId() + ":" +
                     entry.getEntryType().name() + ":" +
-                    entry.getAmount().toPlainString() + ":" +
+                    amountStr + ":" +
                     entry.getPrevHash();
 
             String expectedHash = computeSha256(payload);
