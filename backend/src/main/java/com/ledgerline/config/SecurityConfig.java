@@ -42,7 +42,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) // for H2 console
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/health/**", "/api/admin/bootstrap", "/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/health/**",
+                                "/api/ledger/verify-integrity",
+                                "/api/ledger/simulate-concurrency",
+                                "/api/admin/bootstrap",
+                                "/h2-console/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/ledger/**").hasAnyRole("ADMIN", "AUDITOR", "ACCOUNT_HOLDER")
