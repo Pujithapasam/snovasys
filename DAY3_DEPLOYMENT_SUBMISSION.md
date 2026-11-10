@@ -211,3 +211,4 @@ docker compose up --build
 > 2. **Hardware Security Module (HSM) Signing**: Ledger entries currently chain SHA-256 hashes in software. Production deployment would integrate asymmetrical private key signing via AWS KMS or HashiCorp Vault.
 > 3. **Multi-Currency FX Rate Settlement Engine**: All accounts currently settle in USD. Real-time foreign exchange conversion spreads and multi-currency clearing accounts are planned for the next release.
 > 4. **Biometric WebAuthn / Multi-Factor Authentication (MFA)**: Authentication relies on JWT tokens with BCrypt-hashed passwords. Step-up authentication for large-value transfers (> $10,000) is scheduled for future implementation.
+

@@ -14,11 +14,11 @@ Copy and paste these exact, polished answers directly into your submission form 
 
 ### GitHub Repository Link
 *(Ensure repository is set to **Public** before submission)*
-`https://github.com/YOUR_GITHUB_USERNAME/ledgerline`
+`https://github.com/Pujithapasam/snovasys`
 
 ### Live Website Link
 *(Deploy frontend on Vercel/Netlify and backend on Render/Railway)*
-`https://ledgerline.vercel.app` (or your active deployment URL)
+`https://snovasys.vercel.app` (or your active Vercel deployment URL)
 
 ---
 
@@ -61,8 +61,8 @@ Copy and paste these exact, polished answers directly into your submission form 
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_GITHUB_USERNAME/ledgerline.git
-cd ledgerline
+git clone https://github.com/Pujithapasam/snovasys.git
+cd snovasys
 
 # 2. Run the Spring Boot Backend (Terminal 1)
 cd backend
