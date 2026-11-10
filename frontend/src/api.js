@@ -37,6 +37,28 @@ export const api = {
     return data;
   },
 
+  async register(username, password, email, fullName, role = 'ACCOUNT_HOLDER', initialDeposit = 1000.0) {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username,
+        password,
+        email,
+        fullName,
+        role,
+        initialDeposit: parseFloat(initialDeposit)
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Registration failed' }));
+      throw new Error(err.message || 'Registration failed');
+    }
+    const data = await res.json();
+    setStoredToken(data.token);
+    return data;
+  },
+
   async getAccounts() {
     const res = await fetch(`${API_BASE}/accounts`, {
       headers: authHeaders()

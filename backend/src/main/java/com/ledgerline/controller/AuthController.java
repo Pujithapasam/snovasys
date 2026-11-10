@@ -2,7 +2,7 @@ package com.ledgerline.controller;
 
 import com.ledgerline.dto.AuthRequest;
 import com.ledgerline.dto.AuthResponse;
-import com.ledgerline.model.Role;
+import com.ledgerline.dto.RegisterRequest;
 import com.ledgerline.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody AuthRequest request,
-                                                @RequestParam(defaultValue = "ACCOUNT_HOLDER") Role role) {
-        return ResponseEntity.ok(authService.register(request.getUsername(), request.getPassword(), role));
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.registerUser(request));
     }
 
     @GetMapping("/me")
@@ -43,4 +42,3 @@ public class AuthController {
         ));
     }
 }
-

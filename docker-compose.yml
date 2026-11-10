@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: ledgerline-db
+    container_name: balancevault-db
     environment:
       POSTGRES_DB: ledgerline_db
       POSTGRES_USER: ledgerline_user
@@ -12,8 +12,21 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/01-init-roles.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ledgerline_user -d ledgerline_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: balancevault-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,7 +35,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: ledgerline-backend
+    container_name: balancevault-backend
     ports:
       - "8080:8080"
     environment:
@@ -32,15 +45,20 @@ services:
       DB_NAME: ledgerline_db
       DB_USER: ledgerline_user
       DB_PASSWORD: ledgerline_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ADMIN_BOOTSTRAP_SECRET: balancevault-bootstrap-secret-2026
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: ledgerline-frontend
+    container_name: balancevault-frontend
     ports:
       - "5173:80"
     depends_on:
@@ -48,4 +66,3 @@ services:
 
 volumes:
   pgdata:
-

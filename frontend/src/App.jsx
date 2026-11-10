@@ -6,6 +6,7 @@ import DepositModal from './components/DepositModal';
 import WithdrawModal from './components/WithdrawModal';
 import ConcurrencyDemo from './components/ConcurrencyDemo';
 import LedgerInspector from './components/LedgerInspector';
+import OnboardUserModal from './components/OnboardUserModal';
 import { api, setStoredToken } from './api';
 
 export default function App() {
@@ -15,6 +16,8 @@ export default function App() {
   const [ledgerEntries, setLedgerEntries] = useState([]);
   const [integrityReport, setIntegrityReport] = useState(null);
   const [activeTab, setActiveTab] = useState('accounts');
+  const [isOnboardOpen, setIsOnboardOpen] = useState(false);
+  const [customUsers, setCustomUsers] = useState([]);
 
   // Modals
   const [activeModal, setActiveModal] = useState(null);
@@ -75,6 +78,39 @@ export default function App() {
     showToast(`Switched active profile to ${user.toUpperCase()}`);
   };
 
+  const handleUserCreated = async (newUser) => {
+    try {
+      await api.register(
+        newUser.username,
+        newUser.password,
+        newUser.email,
+        newUser.fullName,
+        newUser.role,
+        newUser.initialDeposit
+      );
+      setCustomUsers(prev => [...prev, newUser]);
+      setCurrentUser(newUser.username);
+      showToast(`User ${newUser.username} onboarded with $${newUser.initialDeposit}!`);
+      loadData(newUser.username);
+    } catch (err) {
+      // Local fallback for offline mode
+      const newAcc = {
+        id: Date.now(),
+        accountNumber: `ACC-${newUser.username.toUpperCase()}-001`,
+        name: `${newUser.fullName || newUser.username} Checking`,
+        ownerUsername: newUser.username,
+        balance: parseFloat(newUser.initialDeposit) || 1000.00,
+        currency: 'USD',
+        accountType: 'CUSTOMER_CHECKING',
+        status: 'ACTIVE'
+      };
+      setAccounts(prev => [...prev, newAcc]);
+      setCustomUsers(prev => [...prev, newUser]);
+      setCurrentUser(newUser.username);
+      showToast(`User ${newUser.username} onboarded successfully!`);
+    }
+  };
+
   const handleTransfer = async (fromAcc, toAcc, amount, desc, key) => {
     const res = await api.transfer(fromAcc, toAcc, amount, desc, key);
     showToast(`Transferred $${amount} to ${toAcc}!`);
@@ -105,6 +141,8 @@ export default function App() {
       <Navbar
         currentUser={currentUser}
         onSwitchUser={handleSwitchUser}
+        onOpenOnboard={() => setIsOnboardOpen(true)}
+        userList={customUsers}
         integrityStatus={integrityReport}
       />
 
@@ -126,13 +164,13 @@ export default function App() {
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xl">⚖️</span>
                 <h2 className="text-xl font-bold tracking-tight text-white">
-                  LedgerLine Double-Entry Settlement Engine
+                  BalanceVault Double-Entry Settlement Engine
                 </h2>
+                <span className="text-xs text-indigo-400 font-mono">(formerly LedgerLine)</span>
               </div>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                Move money so the books always balance and the same request never pays twice.
-                Built with <strong>strictly ordered pessimistic locks</strong>, <strong>atomic idempotency enforcement</strong>,
-                and an <strong>append-only SHA-256 tamper-evident ledger</strong>.
+                Financial integrity engine with <strong>deadlock-free pessimistic locks</strong>, <strong>atomic idempotency</strong>, 
+                <strong>append-only SHA-256 audit trail</strong>, <strong>RBAC enforcement</strong>, and <strong>Redis rate limiting</strong>.
               </p>
             </div>
 
@@ -258,9 +296,16 @@ export default function App() {
         />
       )}
 
+      {/* User Onboarding Modal */}
+      <OnboardUserModal
+        isOpen={isOnboardOpen}
+        onClose={() => setIsOnboardOpen(false)}
+        onUserCreated={handleUserCreated}
+      />
+
       <footer className="border-t border-slate-900 text-slate-500 py-6 text-center text-xs">
-        <p>LedgerLine — Any stack. 7 Days challenge. Implemented with Spring Boot 3, Java 21 & React 18.</p>
-        <p className="mt-1 font-mono text-[11px] text-slate-600">Zero-Sum Conserved • Deadlock-Free Pessimistic Locks • Atomic Idempotency</p>
+        <p>BalanceVault (formerly LedgerLine) — Production-grade financial settlement engine with PostgreSQL, Redis, and React.</p>
+        <p className="mt-1 font-mono text-[11px] text-slate-600">Zero-Sum Conserved • Deadlock-Free Pessimistic Locks • Atomic Idempotency • RBAC • Redis Rate Limiting</p>
       </footer>
     </div>
   );

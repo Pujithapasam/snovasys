@@ -75,6 +75,15 @@ public class AccountService {
         return toDto(account);
     }
 
+    @Transactional
+    public AccountDto updateAccountStatus(String accountNumber, String status) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found: " + accountNumber));
+        account.setStatus(status.toUpperCase());
+        account = accountRepository.save(account);
+        return toDto(account);
+    }
+
     private AccountDto toDto(Account account) {
         return new AccountDto(
                 account.getId(),

@@ -25,8 +25,8 @@ public class LedgerIntegrityTest {
         assertNotNull(audit);
         assertTrue(audit.isValid(), "Ledger audit report must be valid");
         assertTrue(audit.isHashChainIntact(), "Cryptographic hash chain must be intact");
-        assertEquals(BigDecimal.ZERO, audit.getNetImbalance().stripTrailingZeros(), "Net imbalance must be zero");
-        assertEquals(audit.getTotalDebits(), audit.getTotalCredits(), "Total debits must match total credits exactly");
+        assertEquals(0, BigDecimal.ZERO.compareTo(audit.getNetImbalance()), "Net imbalance must be zero");
+        assertEquals(0, audit.getTotalDebits().compareTo(audit.getTotalCredits()), "Total debits must match total credits exactly");
         assertTrue(audit.getTotalEntriesVerified() > 0, "There should be verified ledger entries");
         assertTrue(audit.getProofVerdict().contains("PROVEN_CONSERVED"), "Verdict must confirm conservation of money");
     }

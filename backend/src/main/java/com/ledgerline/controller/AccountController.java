@@ -51,5 +51,14 @@ public class AccountController {
 
         return ResponseEntity.ok(accountService.createAccount(username, name, initialDeposit, type));
     }
+
+    @PatchMapping("/{accountNumber}/status")
+    public ResponseEntity<AccountDto> updateStatus(
+            @PathVariable String accountNumber,
+            @RequestBody Map<String, String> payload,
+            Authentication auth) {
+        String status = payload.getOrDefault("status", "ACTIVE");
+        return ResponseEntity.ok(accountService.updateAccountStatus(accountNumber, status));
+    }
 }
 

@@ -176,6 +176,10 @@ public class TransactionService {
             Account account = accountRepository.findByAccountNumberForUpdate(req.getAccountNumber())
                     .orElseThrow(() -> new AccountNotFoundException("Account not found: " + req.getAccountNumber()));
 
+            if (!"ACTIVE".equals(account.getStatus())) {
+                throw new InvalidTransactionException("Account is not active (status: " + account.getStatus() + ")");
+            }
+
             Account systemClearing = accountRepository.findFirstByAccountType(AccountType.SYSTEM_CLEARING)
                     .orElseThrow(() -> new IllegalStateException("System clearing vault account is missing"));
 
@@ -249,6 +253,10 @@ public class TransactionService {
         try {
             Account account = accountRepository.findByAccountNumberForUpdate(req.getAccountNumber())
                     .orElseThrow(() -> new AccountNotFoundException("Account not found: " + req.getAccountNumber()));
+
+            if (!"ACTIVE".equals(account.getStatus())) {
+                throw new InvalidTransactionException("Account is not active (status: " + account.getStatus() + ")");
+            }
 
             Account systemClearing = accountRepository.findFirstByAccountType(AccountType.SYSTEM_CLEARING)
                     .orElseThrow(() -> new IllegalStateException("System clearing vault account is missing"));
