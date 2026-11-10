@@ -24,3 +24,4 @@ echo   Backend:  http://localhost:8080/
 echo   Health:   http://localhost:8080/api/health
 echo   Audit:    http://localhost:8080/api/ledger/verify-integrity
 echo ============================================================
+

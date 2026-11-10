@@ -129,3 +129,4 @@ curl -X GET http://localhost:8080/api/ledger/verify-integrity
   "proofVerdict": "PROVEN_CONSERVED: Books balance perfectly. Debits match Credits ($4250.0000). SHA-256 audit chain verified intact."
 }
 ```
+

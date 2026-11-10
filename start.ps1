@@ -23,3 +23,4 @@ Write-Host "   LedgerLine is running!                                   " -Foreg
 Write-Host "   Frontend: http://localhost:5173/                         " -ForegroundColor White
 Write-Host "   Backend:  http://localhost:8080/                         " -ForegroundColor White
 Write-Host "============================================================" -ForegroundColor Cyan
+
