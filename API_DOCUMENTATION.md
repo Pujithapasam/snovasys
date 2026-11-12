@@ -304,3 +304,4 @@ This document provides a comprehensive reference for all REST API endpoints prov
 ### 7.3 Kubernetes / Cloud Liveness Probe
 - **Endpoint:** `GET /api/health/live`
 - **Response:** `200 OK` `{"status": "ALIVE"}`
+

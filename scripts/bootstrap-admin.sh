@@ -46,3 +46,4 @@ else
   echo "$HTTP_BODY"
   exit 1
 fi
+

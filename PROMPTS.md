@@ -103,3 +103,4 @@ This document provides a transparent, auditable log of the AI prompts, engineeri
 1. **AI generates optimistic happy-path code**: Without explicit mathematical boundary instructions, AI defaults to naive CRUD operations that fail under race conditions.
 2. **Double-spending requires multi-layer defense**: Application-level checks are insufficient; database-level constraints (`UNIQUE`, `CHECK`, row-level locks) are mandatory.
 3. **Resilience requires fallback architectures**: Rather than crashing if Redis is offline during local evaluation, fallback degradation guarantees continuous test execution and uptime.
+

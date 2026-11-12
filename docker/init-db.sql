@@ -36,3 +36,4 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO balancevault
 -- 5. Revoke destructive privileges from runtime application
 REVOKE DROP, TRUNCATE ON ALL TABLES IN SCHEMA public FROM balancevault_app;
 REVOKE DROP, TRUNCATE, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public FROM balancevault_audit;
+

@@ -28,3 +28,4 @@ Use this structured script to record your **3 to 5-minute evaluation demo video*
    ```
 3. **Screen Resolution**: Set recording resolution to 1080p (1920x1080) for sharp readability of tables and hash strings.
 4. **Microphone**: Test audio clarity before beginning.
+

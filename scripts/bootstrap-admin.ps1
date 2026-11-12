@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     BalanceVault - First-Admin Bootstrap Utility (PowerShell)
 .DESCRIPTION
@@ -46,3 +46,4 @@ catch {
         Write-Host "Server Response: $($reader.ReadToEnd())" -ForegroundColor Red
     }
 }
+

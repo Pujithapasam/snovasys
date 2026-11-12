@@ -152,3 +152,4 @@ To initialize the root administrative tenant securely without hardcoding plainte
 - The script `scripts/bootstrap-admin.sh` (or `scripts/bootstrap-admin.ps1`) sends a secure initialization payload to `POST /api/admin/bootstrap`.
 - The endpoint is protected by a pre-shared cryptographic secret `ADMIN_BOOTSTRAP_SECRET`.
 - Once configured, all subsequent attempts to bootstrap or re-initialize admin credentials without the secret are rejected with HTTP 403 Forbidden.
+

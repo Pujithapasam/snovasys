@@ -49,3 +49,4 @@ public class RegisterRequest {
     public BigDecimal getInitialDeposit() { return initialDeposit; }
     public void setInitialDeposit(BigDecimal initialDeposit) { this.initialDeposit = initialDeposit; }
 }
+

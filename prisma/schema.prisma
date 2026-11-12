@@ -143,3 +143,4 @@ model IdempotencyRecord {
   @@index([idempotencyKey])
   @@map("idempotency_records")
 }
+

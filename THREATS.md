@@ -94,3 +94,4 @@ Deadlock condition (Circular Wait) is mathematically impossible.
 - [x] Database roles separated: `balancevault_app` has CRUD only; `balancevault_audit` has read-only SELECT; `balancevault_admin` owns schema.
 - [x] Sliding-window rate limiting active on all public endpoints.
 - [x] Deep health check `/api/health` validates live DB latency, rate limiter backend, and cryptographic ledger integrity before reporting `UP`.
+
