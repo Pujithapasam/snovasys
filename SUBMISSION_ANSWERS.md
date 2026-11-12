@@ -17,8 +17,9 @@ Copy and paste these exact, polished answers directly into your submission form 
 `https://github.com/Pujithapasam/snovasys`
 
 ### Live Website Link
-*(Deployed on Vercel)*
-`https://snovasys.vercel.app` (or your active Vercel deployment URL)
+*(Deployed on GitHub Pages or Vercel)*
+`https://pujithapasam.github.io/snovasys/`
+*(OR Vercel: `https://snovasys.vercel.app`)*
 
 ---
 
